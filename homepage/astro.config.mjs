@@ -5,4 +5,7 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
 	site: 'https://alexhhn.github.io',
 	base: '/haitek',
+	build: {
+		assets: 'assets',
+	},
 });
