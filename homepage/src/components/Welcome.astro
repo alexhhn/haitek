@@ -1,0 +1,157 @@
+---
+import background from '../assets/background.svg';
+import logo from '../assets/logo.svg';
+---
+
+<div id="container">
+	<img id="background" src={background.src} alt="" fetchpriority="high" />
+	<main>
+		<section id="hero">
+			<div class="header">
+				<img id="logo" src={logo.src} alt="Haitek Logo" width="48" height="48" />
+				<div class="title">
+					<h1>Haitek</h1>
+				</div>
+			</div>
+			<p class="description">
+				Haitek AS er en nyoppstartet IT-selskap som har fokus på utforske og utvikle nye teknologier innen web, spillteknologi og design. Nedenfor er en liste over våre aktuelle prosjekter.
+			</p>
+			<ul class="projects-list">
+				<li>
+					<a href="http://example.com" target="_blank" rel="noopener noreferrer">Kvidd</a> - Som aksjonær og utviklingspartner bidrar Haitek til Kvidd, en SaaS-løsning for dokumenthåndtering brukt av over 20 kommuner med betydelige volum.
+				</li>
+				<li>
+					<a href="http://example.com" target="_blank" rel="noopener noreferrer">WalkingPad BetterUI</a> - En forskningsapplikasjon utviklet for å forbedre brukergrensesnittet til WalkingPad basert på individuell bruk.
+				</li>
+				<li>
+					<a href="http://example.com" target="_blank" rel="noopener noreferrer">Kamera Video AI</a> - Haitek utforsker bruken av vlogger og AI for å automatisk generere sammendrag av videoinnhold.
+				</li>
+				<li>
+					<a href="http://example.com" target="_blank" rel="noopener noreferrer">Better media queries</a> - Haitek har som mål å utvikle et frontend-verktøy som forenkler responsiv design for ulike skjermstørrelser.
+				</li>
+				<li>
+					<a href="http://example.com" target="_blank" rel="noopener noreferrer">Switch2GameDev</a> - Haitek forsker på flerspillerspill for den nylig lanserte Nintendo Switch 2.
+				</li>
+			</ul>
+		</section>
+	</main>
+</div>
+
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+	#background {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+		filter: blur(100px);
+		opacity: 0.8;
+	}
+
+	#container {
+		font-family: Inter, sans-serif;
+		height: 100%;
+		background: #f8fbf8;
+	}
+
+	main {
+		height: 100%;
+		display: flex;
+		justify-content: flex-start;
+		padding: 0 5%;
+	}
+
+	#hero {
+		display: flex;
+		align-items: flex-start;
+		flex-direction: column;
+		justify-content: center;
+		padding: 16px;
+		max-width: 800px;
+		text-align: left;
+	}
+
+	.header {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		margin-bottom: 24px;
+	}
+
+	.title {
+		display: flex;
+		flex-direction: column;
+	}
+
+	#logo {
+		transition: transform 0.3s ease;
+	}
+
+	#logo:hover {
+		transform: scale(1.05);
+	}
+
+	h1 {
+		font-size: 36px;
+		margin: 0;
+		color: #006400; /* Dark Green */
+		font-weight: 700;
+		font-family: Inter, sans-serif;
+	}
+
+	.description {
+		font-size: 20px;
+		line-height: 1.6;
+		color: #000000;
+		margin: 24px 0;
+		max-width: 800px;
+		font-family: Inter, sans-serif;
+	}
+
+	.projects-list {
+		list-style: none;
+		padding: 0;
+		margin-top: 32px;
+		max-width: 800px; /* Match description width */
+		font-family: Inter, sans-serif;
+	}
+
+	.projects-list li {
+		margin-bottom: 16px;
+		line-height: 1.6;
+		font-size: 16px; /* Reduced font size */
+	}
+
+	.projects-list a {
+		font-weight: 700;
+		color: #2F4F2F; /* Darker Grey Green (DarkSlateGray) */
+		text-decoration: none;
+	}
+
+	.projects-list a:hover {
+		text-decoration: underline;
+	}
+
+	@media screen and (max-width: 768px) {
+		.header {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 16px;
+		}
+
+		h1 {
+			font-size: 36px;
+		}
+
+		h2 {
+			font-size: 20px;
+		}
+
+		.description {
+			font-size: 16px;
+		}
+	}
+</style>
