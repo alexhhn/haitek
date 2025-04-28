@@ -1,14 +1,13 @@
 ---
-import background from '../assets/background.svg';
+import { Image } from 'astro:assets';
 import logo from '../assets/logo.svg';
 ---
 
 <div id="container">
-	<img id="background" src={background.src} alt="" fetchpriority="high" />
 	<main>
 		<section id="hero">
 			<div class="header">
-				<img id="logo" src={logo.src} alt="Haitek Logo" width="48" height="48" />
+				<Image id="logo" src={logo} alt="Haitek Logo" width={48} height={48} />
 				<div class="title">
 					<h1>Haitek</h1>
 				</div>
