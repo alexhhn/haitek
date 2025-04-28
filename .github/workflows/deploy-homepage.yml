@@ -1,0 +1,35 @@
+name: Deploy Homepage to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'homepage/**' # Only trigger when homepage files change
+      - '.github/workflows/deploy-homepage.yml'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./homepage # Set working directory to homepage
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build website
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: homepage/dist # Specify the homepage dist folder
