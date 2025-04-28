@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta
+			name="description"
+			content="WalkingPad BetterUI - Improved interface for WalkingPad treadmills"
+		/>
+		<link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+
+		<!-- Preload fonts -->
+		<link
+			rel="preload"
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+			as="style"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+		/>
+
+		<title>WalkingPad BetterUI</title>
+		<style>
+			:root {
+				--primary: #2563eb;
+				--secondary: #64748b;
+				--success: #22c55e;
+				--danger: #ef4444;
+				--background: #f8fafc;
+			}
+
+			body {
+				margin: 0;
+				padding: 0;
+				font-family: 'Inter', sans-serif;
+				background: var(--background);
+			}
+
+			.container {
+				max-width: 800px;
+				margin: 0 auto;
+				padding: 20px;
+			}
+
+			.dashboard {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 20px;
+				margin-top: 20px;
+			}
+
+			.stats-card {
+				background: white;
+				border-radius: 12px;
+				padding: 20px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			}
+
+			.speed-control {
+				grid-column: 1 / -1;
+				text-align: center;
+				padding: 30px;
+				background: white;
+				border-radius: 12px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			}
+
+			.speed-display {
+				font-size: 48px;
+				font-weight: bold;
+				color: var(--primary);
+				margin: 20px 0;
+			}
+
+			.control-buttons {
+				display: flex;
+				justify-content: center;
+				gap: 20px;
+				margin-top: 20px;
+			}
+
+			button {
+				padding: 12px 24px;
+				border-radius: 8px;
+				border: none;
+				font-size: 16px;
+				cursor: pointer;
+				transition: all 0.2s;
+			}
+
+			.btn-primary {
+				background: var(--primary);
+				color: white;
+			}
+
+			.btn-danger {
+				background: var(--danger);
+				color: white;
+			}
+
+			.status-indicator {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				margin-bottom: 20px;
+			}
+
+			.status-dot {
+				width: 12px;
+				height: 12px;
+				border-radius: 50%;
+				background: var(--secondary);
+			}
+
+			.status-dot.connected {
+				background: var(--success);
+			}
+
+			.stats-label {
+				color: var(--secondary);
+				font-size: 14px;
+			}
+
+			.stats-value {
+				font-size: 24px;
+				font-weight: bold;
+				margin-top: 8px;
+			}
+
+			@media (max-width: 600px) {
+				.dashboard {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="status-indicator">
+				<div class="status-dot" id="connectionStatus"></div>
+				<span>Device Status</span>
+			</div>
+
+			<div class="speed-control">
+				<h2>Current Speed</h2>
+				<div class="speed-display">
+					<span id="speedValue">0.0</span>
+					<span>km/h</span>
+				</div>
+				<div class="control-buttons">
+					<button class="btn-primary" onclick="decreaseSpeed()">-</button>
+					<button class="btn-primary" onclick="increaseSpeed()">+</button>
+					<button class="btn-danger" onclick="emergencyStop()">STOP</button>
+				</div>
+			</div>
+
+			<div class="dashboard">
+				<div class="stats-card">
+					<div class="stats-label">Distance</div>
+					<div class="stats-value"><span id="distanceValue">0.00</span> km</div>
+				</div>
+				<div class="stats-card">
+					<div class="stats-label">Time</div>
+					<div class="stats-value"><span id="timeValue">00:00</span></div>
+				</div>
+				<div class="stats-card">
+					<div class="stats-label">Calories</div>
+					<div class="stats-value"><span id="caloriesValue">0</span> kcal</div>
+				</div>
+				<div class="stats-card">
+					<div class="stats-label">Steps</div>
+					<div class="stats-value"><span id="stepsValue">0</span></div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			let currentSpeed = 0;
+			let isConnected = false;
+			let distance = 0;
+			let calories = 0;
+			let steps = 0;
+			let seconds = 0;
+			let workoutInterval;
+
+			// Simulate device connection
+			setTimeout(() => {
+				isConnected = true;
+				document.getElementById('connectionStatus').classList.add('connected');
+			}, 2000);
+
+			function increaseSpeed() {
+				if (currentSpeed < 6.0) {
+					currentSpeed = Math.round((currentSpeed + 0.1) * 10) / 10;
+					updateSpeedDisplay();
+					if (!workoutInterval) startWorkoutTracking();
+				}
+			}
+
+			function decreaseSpeed() {
+				if (currentSpeed > 0) {
+					currentSpeed = Math.round((currentSpeed - 0.1) * 10) / 10;
+					updateSpeedDisplay();
+					if (currentSpeed === 0) stopWorkoutTracking();
+				}
+			}
+
+			function emergencyStop() {
+				currentSpeed = 0;
+				updateSpeedDisplay();
+				stopWorkoutTracking();
+			}
+
+			function updateSpeedDisplay() {
+				document.getElementById('speedValue').textContent =
+					currentSpeed.toFixed(1);
+			}
+
+			function startWorkoutTracking() {
+				workoutInterval = setInterval(() => {
+					// Update time
+					seconds++;
+					updateTimeDisplay();
+
+					// Update distance (km) based on speed (km/h)
+					distance += currentSpeed / 3600;
+					document.getElementById('distanceValue').textContent =
+						distance.toFixed(2);
+
+					// Update calories (rough estimation)
+					calories = Math.round(distance * 60);
+					document.getElementById('caloriesValue').textContent = calories;
+
+					// Update steps (rough estimation: 1300 steps per km)
+					steps = Math.round(distance * 1300);
+					document.getElementById('stepsValue').textContent = steps;
+				}, 1000);
+			}
+
+			function stopWorkoutTracking() {
+				if (workoutInterval) {
+					clearInterval(workoutInterval);
+					workoutInterval = null;
+				}
+			}
+
+			function updateTimeDisplay() {
+				const minutes = Math.floor(seconds / 60);
+				const remainingSeconds = seconds % 60;
+				document.getElementById('timeValue').textContent = `${minutes
+					.toString()
+					.padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+			}
+
+			// Handle keyboard controls
+			document.addEventListener('keydown', (e) => {
+				if (e.key === 'ArrowUp') increaseSpeed();
+				if (e.key === 'ArrowDown') decreaseSpeed();
+				if (e.key === ' ') emergencyStop();
+			});
+		</script>
+
+		<!-- Fallback for no JavaScript -->
+		<noscript>
+			<div style="padding: 2rem; text-align: center">
+				<h1>JavaScript Required</h1>
+				<p>Please enable JavaScript to use WalkingPad BetterUI.</p>
+			</div>
+		</noscript>
+	</body>
+</html>
