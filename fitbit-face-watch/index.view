@@ -1,0 +1,25 @@
+<svg>
+  <defs>
+    <style>
+      .text { font-family: System-Regular; fill: white; }
+      .time { font-size: 40; }
+      .date { font-size: 20; }
+      .data { font-size: 18; }
+    </style>
+  </defs>
+  
+  <g id="background">
+    <rect width="100%" height="100%" fill="black"/>
+  </g>
+  
+  <g id="time-display">
+    <text id="time" class="text time" x="50%" y="40%" text-anchor="middle"/>
+    <text id="date" class="text date" x="50%" y="50%" text-anchor="middle"/>
+  </g>
+  
+  <g id="data-display">
+    <text id="steps" class="text data" x="50%" y="65%" text-anchor="middle"/>
+    <text id="heartrate" class="text data" x="50%" y="75%" text-anchor="middle"/>
+    <text id="battery" class="text data" x="50%" y="85%" text-anchor="middle"/>
+  </g>
+</svg>
